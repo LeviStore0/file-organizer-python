@@ -1,0 +1,43 @@
+import os
+import shutil
+
+# Set the path to the folder you want to organize
+folder_path = 'C:/Users/YourUsername/Downloads'  # Change this!
+
+# Define categories and associated file extensions
+file_types = {
+    'Images': ['.jpg', '.jpeg', '.png', '.gif'],
+    'Documents': ['.pdf', '.docx', '.txt', '.xlsx'],
+    'Videos': ['.mp4', '.mov', '.avi'],
+    'Music': ['.mp3', '.wav'],
+    'Archives': ['.zip', '.rar', '.7z'],
+    'Code': ['.py', '.js', '.html', '.css'],
+    'Others': []
+}
+
+def create_folder(folder):
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+
+def get_category(extension):
+    for category, extensions in file_types.items():
+        if extension in extensions:
+            return category
+    return 'Others'
+
+def organize_files():
+    for file in os.listdir(folder_path):
+        file_path = os.path.join(folder_path, file)
+        
+        if os.path.isfile(file_path):
+            _, ext = os.path.splitext(file)
+            category = get_category(ext.lower())
+            target_folder = os.path.join(folder_path, category)
+
+            create_folder(target_folder)
+            shutil.move(file_path, os.path.join(target_folder, file))
+            print(f"Moved: {file} ➜ {category}")
+
+if __name__ == '__main__':
+    organize_files()
+    print("✅ All files have been organized.")
